@@ -1,6 +1,4 @@
-# tag-sphere-react
-
-## 3D Tag Sphere Effect (React)
+# 3D Tag Sphere Animation (React)
 
 A React implementation of the best JS tag sphere animation, Check more details in [this repo](https://github.com/cong-min/TagCloud), thanks to @cong-min
 
