@@ -84,6 +84,7 @@ const TagSphere = ({ texts = [], options = {} }) => {
     //   setMouseX(() => (Math.abs(mouseX - mouseX0) < 1 ? mouseX0 : (mouseX + mouseX0) / 2)) // reset distance between the mouse and rolling center x axis
     //   setMouseY(() => (Math.abs(mouseY - mouseY0) < 1 ? mouseY0 : (mouseY + mouseY0) / 2)) // reset distance between the mouse and rolling center y axis
     // }     // if keep `false`, pause rolling after moving mouse out area
+    if (!items) return
     setItems((items) => {
       // calculate text items move speed
       const a = -(Math.min(Math.max(-mouseY, -size), size) / radius) * maxSpeed
@@ -123,6 +124,7 @@ const TagSphere = ({ texts = [], options = {} }) => {
     let alpha = per * per - 0.25
     alpha = (alpha > 1 ? 1 : alpha).toFixed(3)
 
+    if (!newItem.ref.current) return item
     const itemEl = newItem.ref.current
     const left = (item.x - itemEl.offsetWidth / 2).toFixed(2)
     const top = (item.y - itemEl.offsetHeight / 2).toFixed(2)
@@ -144,10 +146,11 @@ const TagSphere = ({ texts = [], options = {} }) => {
     setMouseX(() => mouseX0)
     setMouseY(() => mouseY0)
     window.addEventListener("mousemove", handleMouseMove)
+    next()
   }
 
   const handleMouseMove = (ev) => {
-    ev = ev || window.event
+    if (containerRef.current === null) return
     const rect = containerRef.current.getBoundingClientRect()
     setMouseX(() => (ev.clientX - (rect.left + rect.width / 2)) / 5)
     setMouseY(() => (ev.clientY - (rect.top + rect.height / 2)) / 5)
@@ -155,6 +158,8 @@ const TagSphere = ({ texts = [], options = {} }) => {
 
   /* Set item elements and init the main element */
   useEffect(() => {
+    const containerEL = containerRef.current
+    // console.log(containerEL)
     setItems(
       texts.map((text, index) =>
         createTextItem(text, index, texts.length, size, itemHooks[index])
